@@ -1,0 +1,163 @@
+.properties-panel {
+    background: #ffffff;
+    border-left: 1px solid #e5e7eb;
+    height: 100%;
+    overflow: hidden;
+  
+    .panel-header {
+      padding: 16px;
+      border-bottom: 1px solid #f3f4f6;
+      background: #fafafa;
+  
+      .header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 8px;
+  
+        .header-icon {
+          font-size: 18px;
+          color: #6b7280;
+        }
+      }
+  
+      .field-type-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 12px;
+        text-transform: capitalize;
+      }
+    }
+  
+    .panel-content {
+      padding: 16px;
+      height: calc(100% - 80px);
+      overflow-y: auto;
+  
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        text-align: center;
+  
+        .empty-icon {
+          font-size: 48px;
+          color: #d1d5db;
+          margin-bottom: 16px;
+        }
+  
+        .ant-typography {
+          margin-bottom: 8px;
+        }
+      }
+  
+      .settings-card {
+        margin-bottom: 16px;
+  
+        .ant-card-head {
+          padding: 8px 12px;
+          min-height: auto;
+          border-bottom: 1px solid #f0f0f0;
+  
+          .ant-card-head-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            padding: 0;
+          }
+        }
+  
+        .ant-card-body {
+          padding: 12px;
+        }
+  
+        .ant-form-item {
+          margin-bottom: 12px;
+  
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+  
+        .ant-form-item-label {
+          padding-bottom: 4px;
+  
+          label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #374151;
+          }
+        }
+  
+        .ant-input,
+        .ant-select-selector,
+        .ant-input-number {
+          border-radius: 6px;
+          border-color: #d1d5db;
+  
+          &:focus,
+          &:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+          }
+        }
+  
+        .ant-switch {
+          &.ant-switch-checked {
+            background-color: #3b82f6;
+          }
+        }
+      }
+  
+      .panel-actions {
+        display: flex;
+        gap: 8px;
+        padding-top: 8px;
+  
+        .ant-btn {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          border: 1px solid #e5e7eb;
+          border-radius: 6px;
+          font-size: 12px;
+          color: #6b7280;
+  
+          &:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+          }
+        }
+      }
+    }
+  }
+  
+  // Custom scrollbar
+  .properties-panel .panel-content::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .properties-panel .panel-content::-webkit-scrollbar-track {
+    background: #f9fafb;
+  }
+  
+  .properties-panel .panel-content::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 2px;
+  }
+  
+  .properties-panel .panel-content::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }

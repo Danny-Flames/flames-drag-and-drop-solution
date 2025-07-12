@@ -1,0 +1,192 @@
+.form-section {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  
+    &.drag-over {
+      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    }
+  
+    .ant-card-body {
+      padding: 20px;
+    }
+  
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f3f4f6;
+  
+      .section-drag-handle {
+        color: #9ca3af;
+        cursor: grab;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+  
+        &:hover {
+          color: #6b7280;
+        }
+  
+        &:active {
+          cursor: grabbing;
+        }
+      }
+  
+      .section-title-area {
+        flex: 1;
+  
+        .section-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          cursor: pointer;
+          padding: 4px 8px;
+          border-radius: 6px;
+          transition: background-color 0.2s ease;
+  
+          &:hover {
+            background: #f9fafb;
+  
+            .edit-icon {
+              opacity: 1;
+            }
+          }
+  
+          h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+          }
+  
+          .edit-icon {
+            font-size: 14px;
+            color: #6b7280;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+          }
+        }
+  
+        .title-edit-container {
+          .title-input {
+            font-size: 18px;
+            font-weight: 600;
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+  
+            &:focus, &:hover {
+              border-color: #3b82f6;
+              box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+            }
+          }
+        }
+      }
+  
+      .section-actions {
+        .ant-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          box-shadow: none;
+  
+          &:hover {
+            background: #fef2f2;
+            color: #dc2626;
+          }
+        }
+      }
+    }
+  
+    .section-content {
+      .empty-section {
+        .drop-zone {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 40px 20px;
+          border: 2px dashed #d1d5db;
+          border-radius: 8px;
+          background: #f9fafb;
+          transition: all 0.2s ease;
+  
+          .plus-icon {
+            font-size: 24px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+          }
+  
+          p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 0;
+          }
+  
+          &:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+  
+            .plus-icon {
+              color: #3b82f6;
+            }
+  
+            p {
+              color: #3b82f6;
+            }
+          }
+        }
+      }
+  
+      .section-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+  
+        .field-drop-area {
+          .drop-zone-mini {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            border: 1px dashed #d1d5db;
+            border-radius: 6px;
+            background: #fafafa;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+  
+            .plus-icon-small {
+              font-size: 16px;
+              color: #9ca3af;
+            }
+  
+            span {
+              font-size: 12px;
+              color: #6b7280;
+            }
+  
+            &:hover {
+              border-color: #3b82f6;
+              background: rgba(59, 130, 246, 0.05);
+              opacity: 1;
+  
+              .plus-icon-small {
+                color: #3b82f6;
+              }
+  
+              span {
+                color: #3b82f6;
+              }
+            }
+          }
+        }
+      }
+    }
+  }

@@ -1,0 +1,103 @@
+.dashboard-layout {
+    height: 100vh;
+    background: #f5f7fa;
+  
+    .dashboard-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e8eaed;
+      padding: 0 24px;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+  
+        .logo-section {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+  
+          .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+  
+            .logo-icon {
+              font-size: 24px;
+            }
+          }
+  
+          .form-title {
+            color: #6b7280;
+            font-size: 16px;
+          }
+        }
+  
+        .header-actions {
+          display: flex;
+          gap: 12px;
+  
+          .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+  
+            &:hover {
+              border-color: #3b82f6;
+              color: #3b82f6;
+              box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+            }
+  
+            &.preview-btn {
+              &:hover {
+                border-color: #8b5cf6;
+                color: #8b5cf6;
+              }
+            }
+  
+            &.save-btn {
+              &:hover {
+                border-color: #10b981;
+                color: #10b981;
+              }
+            }
+  
+            &.publish-btn {
+              background: #3b82f6;
+              border-color: #3b82f6;
+              color: #ffffff;
+  
+              &:hover {
+                background: #2563eb;
+                border-color: #2563eb;
+              }
+            }
+          }
+        }
+      }
+    }
+  
+    .dashboard-content {
+      height: calc(100vh - 64px);
+      
+      .main-content {
+        padding: 0;
+        background: #f9fafb;
+      }
+    }
+  }

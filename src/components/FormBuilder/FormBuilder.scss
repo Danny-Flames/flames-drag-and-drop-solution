@@ -1,0 +1,114 @@
+.form-builder {
+    padding: 24px;
+    height: 100%;
+    overflow-y: auto;
+    background: #f9fafb;
+  
+    .form-builder-header {
+      margin-bottom: 32px;
+  
+      .form-title-section {
+        .form-title {
+          font-size: 32px;
+          font-weight: 700;
+          color: #111827;
+          margin: 0 0 8px 0;
+          line-height: 1.2;
+        }
+  
+        .form-description {
+          font-size: 16px;
+          color: #6b7280;
+          margin: 0;
+        }
+      }
+    }
+  
+    .form-builder-content {
+      .empty-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 2px dashed #d1d5db;
+  
+        .empty-description {
+          h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+          }
+  
+          p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 0;
+          }
+        }
+  
+        .ant-btn-primary {
+          background: #3b82f6;
+          border-color: #3b82f6;
+          border-radius: 8px;
+          height: 40px;
+          padding: 0 24px;
+          font-weight: 600;
+  
+          &:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+          }
+        }
+      }
+  
+      .form-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+  
+        .add-section-area {
+          display: flex;
+          justify-content: center;
+          padding: 20px;
+  
+          .add-section-btn {
+            border: 2px dashed #d1d5db;
+            color: #6b7280;
+            background: transparent;
+            border-radius: 8px;
+            height: 48px;
+            padding: 0 32px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+  
+            &:hover {
+              border-color: #3b82f6;
+              color: #3b82f6;
+              background: rgba(59, 130, 246, 0.05);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Custom scrollbar
+  .form-builder::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .form-builder::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  
+  .form-builder::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+  
+  .form-builder::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
