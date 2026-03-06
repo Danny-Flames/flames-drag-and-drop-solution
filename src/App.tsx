@@ -5,7 +5,7 @@ import { store } from './redux/store/store';
 import DashboardLayout from './components/Layout/DashboardLayout';
 import './styles/globals.scss';
 
-const App: React.FC = () => {
+const App: React.FC = () => { 
   return (
     <Provider store={store}>
       <ConfigProvider

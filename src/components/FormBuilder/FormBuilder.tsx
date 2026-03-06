@@ -1,25 +1,16 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { RootState } from "../../redux/store/store";
-import { addSection } from "../../redux/store/slices/formBuilderSlice";
-import FormSection from "./FormSection";
-import { Button, Empty } from "antd";
-import { FiPlus } from "react-icons/fi";
-import "./FormBuilder.scss";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { RootState } from '../../redux/store/store';
+import { addSection } from '../../redux/store/slices/formBuilderSlice';
+import FormSection from './FormSection';
+import { Button, Empty } from 'antd';
+import { FiPlus } from 'react-icons/fi';
+import './FormBuilder.scss';
 
 const FormBuilder: React.FC = () => {
   const dispatch = useDispatch();
-  const { sections, formTitle } = useSelector(
-    (state: RootState) => state.formBuilder
-  );
-
-  const handleAddSection = () => {
-    dispatch(addSection());
-  };
+  const { sections, formTitle } = useSelector((state: RootState) => state.formBuilder.present);
 
   return (
     <div className="form-builder">
@@ -27,7 +18,7 @@ const FormBuilder: React.FC = () => {
         <div className="form-title-section">
           <h1 className="form-title">{formTitle}</h1>
           <p className="form-description">
-            Build your form by dragging and dropping elements from the sidebar
+            Drag and drop elements from the sidebar · Drag fields between sections · Ctrl+Z to undo
           </p>
         </div>
       </div>
@@ -40,26 +31,18 @@ const FormBuilder: React.FC = () => {
               description={
                 <div className="empty-description">
                   <h3>Start building your form</h3>
-                  <p>Add a section to get started with your form</p>
+                  <p>Add a section to get started</p>
                 </div>
               }
             >
-              <Button
-                type="primary"
-                icon={<FiPlus />}
-                onClick={handleAddSection}
-                size="large"
-              >
+              <Button type="primary" icon={<FiPlus />} onClick={() => dispatch(addSection())} size="large">
                 Add Section
               </Button>
             </Empty>
           </div>
         ) : (
           <div className="form-sections">
-            <SortableContext
-              items={sections.map((s) => s.id)}
-              strategy={verticalListSortingStrategy}
-            >
+            <SortableContext items={sections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
               {sections.map((section) => (
                 <FormSection key={section.id} section={section} />
               ))}
@@ -69,7 +52,7 @@ const FormBuilder: React.FC = () => {
               <Button
                 type="dashed"
                 icon={<FiPlus />}
-                onClick={handleAddSection}
+                onClick={() => dispatch(addSection())}
                 className="add-section-btn"
                 size="large"
               >

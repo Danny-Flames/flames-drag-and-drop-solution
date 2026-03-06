@@ -14,7 +14,7 @@ const { Title, Text } = Typography;
 
 const PropertiesPanel: React.FC = () => {
   const dispatch = useDispatch();
-  const { selectedField, sections, formSettings } = useSelector((state: RootState) => state.formBuilder);
+  const { selectedField, present: { sections, formSettings } } = useSelector((state: RootState) => state.formBuilder);
 
   // Find the selected field and its section
   const selectedFieldData = selectedField ? (() => {
@@ -66,7 +66,7 @@ const PropertiesPanel: React.FC = () => {
             <Form layout="vertical" size="small">
               <Form.Item label="Submit Button Text">
                 <Input
-                  value={formSettings.submitButton}
+                  value={formSettings?.submitButton}
                   onChange={(e) => handleFormSettingsUpdate({ submitButton: e.target.value })}
                   placeholder="Submit"
                 />
