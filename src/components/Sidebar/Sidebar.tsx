@@ -18,6 +18,7 @@ import {
 } from "react-icons/fi";
 import { useDraggable } from "@dnd-kit/core";
 import "./Sidebar.scss";
+import { RiSearchLine } from "react-icons/ri";
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -146,7 +147,7 @@ const Sidebar: React.FC = () => {
       <div className="sidebar-content">
         {noResults ? (
           <div className="no-results">
-            <span>🔍</span>
+            <span><RiSearchLine size={24} /></span>
             <p>
               No fields match "<strong>{query}</strong>"
             </p>
