@@ -4,6 +4,7 @@ import { Modal, Input, Select, Checkbox, Radio, Rate, Button, Divider, Tag } fro
 import { RootState } from '../../redux/store/store';
 import { FormField, FormSection } from '../../redux/store/slices/formBuilderSlice';
 import './PreviewModal.scss';
+import { AiOutlineEye } from 'react-icons/ai';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -150,7 +151,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose }) => {
       onCancel={onClose}
       title={
         <div className="preview-modal-title">
-          <span>👁️ Form Preview</span>
+          <span><AiOutlineEye size={18} /> Form Preview</span>
           <div className="preview-meta">
             <Tag color="blue">{sections.length} sections</Tag>
             <Tag color="green">{totalFields} fields</Tag>

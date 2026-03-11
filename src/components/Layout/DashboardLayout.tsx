@@ -31,6 +31,8 @@ import PropertiesPanel from "../PropertiesPanel/PropertiesPanel";
 import PreviewModal from "../Preview/PreviewModal";
 import "./DashboardLayout.scss";
 import { PiPencilSimpleThin } from "react-icons/pi";
+import { AiOutlineEye, AiOutlineSave } from "react-icons/ai";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const { Header, Content } = Layout;
 
@@ -287,7 +289,7 @@ const DashboardLayout: React.FC = () => {
               className="action-btn preview-btn"
               onClick={() => setPreviewOpen(true)}
             >
-              <span>👁️</span> Preview
+              <span><AiOutlineEye size={16} /></span> Preview
             </button>
             <button
               className="action-btn save-btn"
@@ -295,13 +297,13 @@ const DashboardLayout: React.FC = () => {
                 // localStorage already auto-saves; just give feedback
                 const btn = document.activeElement as HTMLButtonElement;
                 const original = btn.textContent;
-                btn.textContent = "✅ Saved!";
+                btn.textContent = "Saved!";
                 setTimeout(() => {
                   btn.textContent = original;
                 }, 1500);
               }}
             >
-              <span>💾</span> Save
+              <span><AiOutlineSave size={18} /></span> Save
             </button>
             <button
               className="action-btn clear-btn"
@@ -314,7 +316,7 @@ const DashboardLayout: React.FC = () => {
                   dispatch(clearForm());
               }}
             >
-              🗑️ Clear
+              <RiDeleteBin6Line size={18} /> Clear
             </button>
           </div>
         </div>
