@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 export interface FormField {
   id: string;
@@ -42,16 +42,16 @@ interface FormBuilderState {
 }
 
 const DEFAULT_SNAPSHOT: FormBuilderSnapshot = {
-  formTitle: 'Untitled Form',
+  formTitle: "Untitled Form",
   sections: [],
   formSettings: {
-    theme: 'default',
-    submitButton: 'Submit',
+    theme: "default",
+    submitButton: "Submit",
     allowDraft: true,
   },
 };
 
-const STORAGE_KEY = 'flames-form-builder-state';
+const STORAGE_KEY = "flames-form-builder-state";
 const MAX_HISTORY = 50;
 
 function loadFromStorage(): FormBuilderSnapshot {
@@ -68,7 +68,10 @@ function saveToStorage(snapshot: FormBuilderSnapshot) {
   } catch {}
 }
 
-function pushHistory(state: FormBuilderState, nextPresent: FormBuilderSnapshot) {
+function pushHistory(
+  state: FormBuilderState,
+  nextPresent: FormBuilderSnapshot
+) {
   state.past = [...state.past.slice(-MAX_HISTORY + 1), state.present];
   state.future = [];
   state.present = nextPresent;
@@ -84,7 +87,7 @@ const initialState: FormBuilderState = {
 };
 
 export const formBuilderSlice = createSlice({
-  name: 'formBuilder',
+  name: "formBuilder",
   initialState,
   reducers: {
     undo: (state) => {
@@ -117,11 +120,16 @@ export const formBuilderSlice = createSlice({
         sections: [...state.present.sections, newSection],
       });
     },
-    updateSectionTitle: (state, action: PayloadAction<{ sectionId: string; title: string }>) => {
+    updateSectionTitle: (
+      state,
+      action: PayloadAction<{ sectionId: string; title: string }>
+    ) => {
       pushHistory(state, {
         ...state.present,
         sections: state.present.sections.map((s) =>
-          s.id === action.payload.sectionId ? { ...s, title: action.payload.title } : s
+          s.id === action.payload.sectionId
+            ? { ...s, title: action.payload.title }
+            : s
         ),
       });
     },
@@ -132,13 +140,23 @@ export const formBuilderSlice = createSlice({
       });
       if (state.selectedField) state.selectedField = null;
     },
-    reorderSections: (state, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
+    reorderSections: (
+      state,
+      action: PayloadAction<{ oldIndex: number; newIndex: number }>
+    ) => {
       const sections = [...state.present.sections];
       const [moved] = sections.splice(action.payload.oldIndex, 1);
       sections.splice(action.payload.newIndex, 0, moved);
       pushHistory(state, { ...state.present, sections });
     },
-    addField: (state, action: PayloadAction<{ sectionId: string; field: Omit<FormField, 'id'>; index?: number }>) => {
+    addField: (
+      state,
+      action: PayloadAction<{
+        sectionId: string;
+        field: Omit<FormField, "id">;
+        index?: number;
+      }>
+    ) => {
       const newField: FormField = { ...action.payload.field, id: uuidv4() };
       const sections = state.present.sections.map((s) => {
         if (s.id !== action.payload.sectionId) return s;
@@ -152,27 +170,50 @@ export const formBuilderSlice = createSlice({
       });
       pushHistory(state, { ...state.present, sections });
     },
-    updateField: (state, action: PayloadAction<{ sectionId: string; fieldId: string; updates: Partial<FormField> }>) => {
+    updateField: (
+      state,
+      action: PayloadAction<{
+        sectionId: string;
+        fieldId: string;
+        updates: Partial<FormField>;
+      }>
+    ) => {
       const sections = state.present.sections.map((s) => {
         if (s.id !== action.payload.sectionId) return s;
         return {
           ...s,
           fields: s.fields.map((f) =>
-            f.id === action.payload.fieldId ? { ...f, ...action.payload.updates } : f
+            f.id === action.payload.fieldId
+              ? { ...f, ...action.payload.updates }
+              : f
           ),
         };
       });
       pushHistory(state, { ...state.present, sections });
     },
-    deleteField: (state, action: PayloadAction<{ sectionId: string; fieldId: string }>) => {
+    deleteField: (
+      state,
+      action: PayloadAction<{ sectionId: string; fieldId: string }>
+    ) => {
       const sections = state.present.sections.map((s) => {
         if (s.id !== action.payload.sectionId) return s;
-        return { ...s, fields: s.fields.filter((f) => f.id !== action.payload.fieldId) };
+        return {
+          ...s,
+          fields: s.fields.filter((f) => f.id !== action.payload.fieldId),
+        };
       });
       pushHistory(state, { ...state.present, sections });
-      if (state.selectedField === action.payload.fieldId) state.selectedField = null;
+      if (state.selectedField === action.payload.fieldId)
+        state.selectedField = null;
     },
-    reorderFields: (state, action: PayloadAction<{ sectionId: string; oldIndex: number; newIndex: number }>) => {
+    reorderFields: (
+      state,
+      action: PayloadAction<{
+        sectionId: string;
+        oldIndex: number;
+        newIndex: number;
+      }>
+    ) => {
       const sections = state.present.sections.map((s) => {
         if (s.id !== action.payload.sectionId) return s;
         const fields = [...s.fields];
@@ -182,7 +223,15 @@ export const formBuilderSlice = createSlice({
       });
       pushHistory(state, { ...state.present, sections });
     },
-    moveFieldToSection: (state, action: PayloadAction<{ fromSectionId: string; toSectionId: string; fieldId: string; toIndex: number }>) => {
+    moveFieldToSection: (
+      state,
+      action: PayloadAction<{
+        fromSectionId: string;
+        toSectionId: string;
+        fieldId: string;
+        toIndex: number;
+      }>
+    ) => {
       const { fromSectionId, toSectionId, fieldId, toIndex } = action.payload;
       let movedField: FormField | null = null;
       const afterRemove = state.present.sections.map((s) => {
@@ -204,7 +253,10 @@ export const formBuilderSlice = createSlice({
       });
       pushHistory(state, { ...state.present, sections: finalSections });
     },
-    updateFormSettings: (state, action: PayloadAction<Partial<FormBuilderSnapshot['formSettings']>>) => {
+    updateFormSettings: (
+      state,
+      action: PayloadAction<Partial<FormBuilderSnapshot["formSettings"]>>
+    ) => {
       pushHistory(state, {
         ...state.present,
         formSettings: { ...state.present.formSettings, ...action.payload },
@@ -213,7 +265,9 @@ export const formBuilderSlice = createSlice({
     clearForm: (state) => {
       pushHistory(state, DEFAULT_SNAPSHOT);
       state.selectedField = null;
-      try { localStorage.removeItem(STORAGE_KEY); } catch {}
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {}
     },
     setSelectedField: (state, action: PayloadAction<string | null>) => {
       state.selectedField = action.payload;
@@ -225,12 +279,22 @@ export const formBuilderSlice = createSlice({
 });
 
 export const {
-  undo, redo,
+  undo,
+  redo,
   setFormTitle,
-  addSection, updateSectionTitle, deleteSection, reorderSections,
-  addField, updateField, deleteField, reorderFields, moveFieldToSection,
-  updateFormSettings, clearForm,
-  setSelectedField, setDraggedFieldType,
+  addSection,
+  updateSectionTitle,
+  deleteSection,
+  reorderSections,
+  addField,
+  updateField,
+  deleteField,
+  reorderFields,
+  moveFieldToSection,
+  updateFormSettings,
+  clearForm,
+  setSelectedField,
+  setDraggedFieldType,
 } = formBuilderSlice.actions;
 
 export default formBuilderSlice.reducer;
