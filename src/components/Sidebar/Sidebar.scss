@@ -16,14 +16,29 @@
       }
   
       .field-search {
-        .ant-input {
-          border-radius: 6px;
+        .ant-input-affix-wrapper {
+          height: 42px !important;
+          border-top-left-radius: 6px;
+          border-bottom-left-radius: 6px;
           border-color: #d1d5db;
-          
-          &:focus, &:hover {
+          display: flex;
+          align-items: center;
+      
+          &:focus-within,
+          &:hover {
             border-color: #3b82f6;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
           }
+        }
+      
+        .ant-input {
+          height: auto !important;
+        }
+
+        .ant-input-search-button {
+          height: 42px !important;
+          border-radius: 0 6px 6px 0 !important;
+          width: 48px !important;
         }
       }
     }

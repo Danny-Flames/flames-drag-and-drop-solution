@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Layout } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from "react";
+import { Layout } from "antd";
+import { useSelector, useDispatch } from "react-redux";
 import {
   DndContext,
   DragEndEvent,
@@ -11,8 +11,8 @@ import {
   useSensor,
   useSensors,
   closestCorners,
-} from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 import {
   addField,
   reorderFields,
@@ -23,18 +23,22 @@ import {
   redo,
   clearForm,
   setFormTitle,
-} from '../../redux/store/slices/formBuilderSlice';
-import { RootState } from '../../redux/store/store';
-import Sidebar from '../Sidebar/Sidebar';
-import FormBuilder from '../FormBuilder/FormBuilder';
-import PropertiesPanel from '../PropertiesPanel/PropertiesPanel';
-import PreviewModal from '../Preview/PreviewModal';
-import './DashboardLayout.scss';
+} from "../../redux/store/slices/formBuilderSlice";
+import { RootState } from "../../redux/store/store";
+import Sidebar from "../Sidebar/Sidebar";
+import FormBuilder from "../FormBuilder/FormBuilder";
+import PropertiesPanel from "../PropertiesPanel/PropertiesPanel";
+import PreviewModal from "../Preview/PreviewModal";
+import "./DashboardLayout.scss";
+import { PiPencilSimpleThin } from "react-icons/pi";
 
 const { Header, Content } = Layout;
 
 // A lightweight overlay card shown while dragging
-const DragOverlayCard: React.FC<{ label: string; type: string }> = ({ label, type }) => (
+const DragOverlayCard: React.FC<{ label: string; type: string }> = ({
+  label,
+  type,
+}) => (
   <div className="drag-overlay-card">
     <span className="drag-overlay-icon">⠿</span>
     <span className="drag-overlay-label">{label}</span>
@@ -44,11 +48,16 @@ const DragOverlayCard: React.FC<{ label: string; type: string }> = ({ label, typ
 
 const DashboardLayout: React.FC = () => {
   const dispatch = useDispatch();
-  const { present, past, future } = useSelector((state: RootState) => state.formBuilder);
+  const { present, past, future } = useSelector(
+    (state: RootState) => state.formBuilder
+  );
   const { sections, formTitle } = present;
 
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [activeDragData, setActiveDragData] = useState<{ label: string; type: string } | null>(null);
+  const [activeDragData, setActiveDragData] = useState<{
+    label: string;
+    type: string;
+  } | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [tempTitle, setTempTitle] = useState(formTitle);
@@ -59,14 +68,20 @@ const DashboardLayout: React.FC = () => {
   // Keyboard shortcuts: Ctrl+Z undo, Ctrl+Y / Ctrl+Shift+Z redo
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const isMac = navigator.platform.toUpperCase().includes('MAC');
+      const isMac = navigator.platform.toUpperCase().includes("MAC");
       const ctrl = isMac ? e.metaKey : e.ctrlKey;
       if (!ctrl) return;
-      if (e.key === 'z' && !e.shiftKey) { e.preventDefault(); dispatch(undo()); }
-      if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) { e.preventDefault(); dispatch(redo()); }
+      if (e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        dispatch(undo());
+      }
+      if (e.key === "y" || (e.key === "z" && e.shiftKey)) {
+        e.preventDefault();
+        dispatch(redo());
+      }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [dispatch]);
 
   const sensors = useSensors(
@@ -75,7 +90,8 @@ const DashboardLayout: React.FC = () => {
 
   // Helper: find which section a field belongs to
   const findSectionOfField = useCallback(
-    (fieldId: string) => sections.find((s) => s.fields.some((f) => f.id === fieldId)),
+    (fieldId: string) =>
+      sections.find((s) => s.fields.some((f) => f.id === fieldId)),
     [sections]
   );
 
@@ -90,8 +106,8 @@ const DashboardLayout: React.FC = () => {
     setActiveId(active.id as string);
     if (active.data.current) {
       setActiveDragData({
-        type: active.data.current.type || 'field',
-        label: active.data.current.label || 'Field',
+        type: active.data.current.type || "field",
+        label: active.data.current.label || "Field",
       });
     }
     dispatch(setDraggedFieldType(active.data.current?.type || null));
@@ -136,8 +152,10 @@ const DashboardLayout: React.FC = () => {
             placeholder: `Enter ${fieldType}...`,
             required: false,
             options:
-              fieldType === 'radio' || fieldType === 'checkbox' || fieldType === 'select'
-                ? ['Option 1', 'Option 2', 'Option 3']
+              fieldType === "radio" ||
+              fieldType === "checkbox" ||
+              fieldType === "select"
+                ? ["Option 1", "Option 2", "Option 3"]
                 : undefined,
           },
         })
@@ -146,7 +164,11 @@ const DashboardLayout: React.FC = () => {
     }
 
     // ── Case 2: Reordering SECTIONS ──────────────────────────────────────────
-    if (isSectionId(activeIdStr) && isSectionId(overIdStr) && activeIdStr !== overIdStr) {
+    if (
+      isSectionId(activeIdStr) &&
+      isSectionId(overIdStr) &&
+      activeIdStr !== overIdStr
+    ) {
       const oldIndex = sections.findIndex((s) => s.id === activeIdStr);
       const newIndex = sections.findIndex((s) => s.id === overIdStr);
       if (oldIndex !== -1 && newIndex !== -1) {
@@ -167,10 +189,16 @@ const DashboardLayout: React.FC = () => {
 
     if (activeSection.id === overSection.id) {
       // Same section reorder
-      const oldIndex = activeSection.fields.findIndex((f) => f.id === activeIdStr);
-      const newIndex = activeSection.fields.findIndex((f) => f.id === overIdStr);
+      const oldIndex = activeSection.fields.findIndex(
+        (f) => f.id === activeIdStr
+      );
+      const newIndex = activeSection.fields.findIndex(
+        (f) => f.id === overIdStr
+      );
       if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-        dispatch(reorderFields({ sectionId: activeSection.id, oldIndex, newIndex }));
+        dispatch(
+          reorderFields({ sectionId: activeSection.id, oldIndex, newIndex })
+        );
       }
     } else {
       // Cross-section move
@@ -211,13 +239,25 @@ const DashboardLayout: React.FC = () => {
                   value={tempTitle}
                   onChange={(e) => setTempTitle(e.target.value)}
                   onBlur={handleTitleSave}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleTitleSave(); if (e.key === 'Escape') { setTempTitle(formTitle); setIsEditingTitle(false); } }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleTitleSave();
+                    if (e.key === "Escape") {
+                      setTempTitle(formTitle);
+                      setIsEditingTitle(false);
+                    }
+                  }}
                   autoFocus
                 />
               ) : (
-                <span className="form-title-display" onClick={() => { setIsEditingTitle(true); setTempTitle(formTitle); }}>
-                  {formTitle} ✏️
-                </span>
+                <div
+                  className="form-title-display"
+                  onClick={() => {
+                    setIsEditingTitle(true);
+                    setTempTitle(formTitle);
+                  }}
+                >
+                  {formTitle} <span><PiPencilSimpleThin size={18} /></span>
+                </div>
               )}
             </div>
           </div>
@@ -225,7 +265,7 @@ const DashboardLayout: React.FC = () => {
           <div className="header-actions">
             {/* Undo / Redo */}
             <button
-              className={`action-btn undo-btn ${!canUndo ? 'disabled' : ''}`}
+              className={`action-btn undo-btn ${!canUndo ? "disabled" : ""}`}
               onClick={() => dispatch(undo())}
               disabled={!canUndo}
               title="Undo (Ctrl+Z)"
@@ -233,7 +273,7 @@ const DashboardLayout: React.FC = () => {
               ↩ Undo
             </button>
             <button
-              className={`action-btn redo-btn ${!canRedo ? 'disabled' : ''}`}
+              className={`action-btn redo-btn ${!canRedo ? "disabled" : ""}`}
               onClick={() => dispatch(redo())}
               disabled={!canRedo}
               title="Redo (Ctrl+Y)"
@@ -243,7 +283,10 @@ const DashboardLayout: React.FC = () => {
 
             <div className="header-divider" />
 
-            <button className="action-btn preview-btn" onClick={() => setPreviewOpen(true)}>
+            <button
+              className="action-btn preview-btn"
+              onClick={() => setPreviewOpen(true)}
+            >
               <span>👁️</span> Preview
             </button>
             <button
@@ -252,15 +295,24 @@ const DashboardLayout: React.FC = () => {
                 // localStorage already auto-saves; just give feedback
                 const btn = document.activeElement as HTMLButtonElement;
                 const original = btn.textContent;
-                btn.textContent = '✅ Saved!';
-                setTimeout(() => { btn.textContent = original; }, 1500);
+                btn.textContent = "✅ Saved!";
+                setTimeout(() => {
+                  btn.textContent = original;
+                }, 1500);
               }}
             >
               <span>💾</span> Save
             </button>
             <button
               className="action-btn clear-btn"
-              onClick={() => { if (window.confirm('Clear the entire form? This cannot be undone after refresh.')) dispatch(clearForm()); }}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Clear the entire form? This cannot be undone after refresh."
+                  )
+                )
+                  dispatch(clearForm());
+              }}
             >
               🗑️ Clear
             </button>
@@ -284,7 +336,10 @@ const DashboardLayout: React.FC = () => {
 
           <DragOverlay>
             {activeId && activeDragData ? (
-              <DragOverlayCard label={activeDragData.label} type={activeDragData.type} />
+              <DragOverlayCard
+                label={activeDragData.label}
+                type={activeDragData.type}
+              />
             ) : null}
           </DragOverlay>
         </DndContext>

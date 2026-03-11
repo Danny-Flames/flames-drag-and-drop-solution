@@ -1,12 +1,23 @@
-import React, { useState, useMemo } from 'react';
-import { Layout, Collapse, Input } from 'antd';
+import React, { useState, useMemo } from "react";
+import { Layout, Collapse, Input } from "antd";
 import {
-  FiType, FiMail, FiPhone, FiCalendar, FiToggleLeft,
-  FiCheckSquare, FiList, FiUploadCloud, FiMapPin, FiUser,
-  FiStar, FiImage, FiFileText, FiHash,
-} from 'react-icons/fi';
-import { useDraggable } from '@dnd-kit/core';
-import './Sidebar.scss';
+  FiType,
+  FiMail,
+  FiPhone,
+  FiCalendar,
+  FiToggleLeft,
+  FiCheckSquare,
+  FiList,
+  FiUploadCloud,
+  FiMapPin,
+  FiUser,
+  FiStar,
+  FiImage,
+  FiFileText,
+  FiHash,
+} from "react-icons/fi";
+import { useDraggable } from "@dnd-kit/core";
+import "./Sidebar.scss";
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -20,34 +31,80 @@ interface FieldType {
 }
 
 const fieldTypes: FieldType[] = [
-  { type: 'text',      label: 'Text Input',    icon: <FiType />,        category: 'basic' },
-  { type: 'textarea',  label: 'Text Area',     icon: <FiFileText />,    category: 'basic' },
-  { type: 'number',    label: 'Number',        icon: <FiHash />,        category: 'basic' },
-  { type: 'email',     label: 'Email',         icon: <FiMail />,        category: 'basic' },
-  { type: 'phone',     label: 'Phone',         icon: <FiPhone />,       category: 'basic' },
-  { type: 'date',      label: 'Date',          icon: <FiCalendar />,    category: 'basic' },
-  { type: 'radio',     label: 'Radio Button',  icon: <FiToggleLeft />,  category: 'choice' },
-  { type: 'checkbox',  label: 'Checkbox',      icon: <FiCheckSquare />, category: 'choice' },
-  { type: 'select',    label: 'Dropdown',      icon: <FiList />,        category: 'choice' },
-  { type: 'rating',    label: 'Rating',        icon: <FiStar />,        category: 'choice' },
-  { type: 'file',      label: 'File Upload',   icon: <FiUploadCloud />, category: 'advanced' },
-  { type: 'image',     label: 'Image Upload',  icon: <FiImage />,       category: 'advanced' },
-  { type: 'address',   label: 'Address',       icon: <FiMapPin />,      category: 'advanced' },
-  { type: 'signature', label: 'Signature',     icon: <FiUser />,        category: 'advanced' },
+  { type: "text", label: "Text Input", icon: <FiType />, category: "basic" },
+  {
+    type: "textarea",
+    label: "Text Area",
+    icon: <FiFileText />,
+    category: "basic",
+  },
+  { type: "number", label: "Number", icon: <FiHash />, category: "basic" },
+  { type: "email", label: "Email", icon: <FiMail />, category: "basic" },
+  { type: "phone", label: "Phone", icon: <FiPhone />, category: "basic" },
+  { type: "date", label: "Date", icon: <FiCalendar />, category: "basic" },
+  {
+    type: "radio",
+    label: "Radio Button",
+    icon: <FiToggleLeft />,
+    category: "choice",
+  },
+  {
+    type: "checkbox",
+    label: "Checkbox",
+    icon: <FiCheckSquare />,
+    category: "choice",
+  },
+  { type: "select", label: "Dropdown", icon: <FiList />, category: "choice" },
+  { type: "rating", label: "Rating", icon: <FiStar />, category: "choice" },
+  {
+    type: "file",
+    label: "File Upload",
+    icon: <FiUploadCloud />,
+    category: "advanced",
+  },
+  {
+    type: "image",
+    label: "Image Upload",
+    icon: <FiImage />,
+    category: "advanced",
+  },
+  {
+    type: "address",
+    label: "Address",
+    icon: <FiMapPin />,
+    category: "advanced",
+  },
+  {
+    type: "signature",
+    label: "Signature",
+    icon: <FiUser />,
+    category: "advanced",
+  },
 ];
 
 const DraggableField: React.FC<{ field: FieldType }> = ({ field }) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: `sidebar-${field.type}`,
-    data: { type: field.type, label: field.label, isNewField: true },
-  });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: `sidebar-${field.type}`,
+      data: { type: field.type, label: field.label, isNewField: true },
+    });
 
   const style = transform
-    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`, opacity: isDragging ? 0.4 : 1, zIndex: isDragging ? 999 : 'auto' }
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        opacity: isDragging ? 0.4 : 1,
+        zIndex: isDragging ? 999 : "auto",
+      }
     : undefined;
 
   return (
-    <div ref={setNodeRef} style={style} {...listeners} {...attributes} className={`field-item ${isDragging ? 'dragging' : ''}`}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`field-item ${isDragging ? "dragging" : ""}`}
+    >
       <div className="field-icon">{field.icon}</div>
       <span className="field-label">{field.label}</span>
     </div>
@@ -55,19 +112,20 @@ const DraggableField: React.FC<{ field: FieldType }> = ({ field }) => {
 };
 
 const Sidebar: React.FC = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
     if (!q) return fieldTypes;
     return fieldTypes.filter(
-      (f) => f.label.toLowerCase().includes(q) || f.type.toLowerCase().includes(q)
+      (f) =>
+        f.label.toLowerCase().includes(q) || f.type.toLowerCase().includes(q)
     );
   }, [query]);
 
-  const basicFields    = filtered.filter((f) => f.category === 'basic');
-  const choiceFields   = filtered.filter((f) => f.category === 'choice');
-  const advancedFields = filtered.filter((f) => f.category === 'advanced');
+  const basicFields = filtered.filter((f) => f.category === "basic");
+  const choiceFields = filtered.filter((f) => f.category === "choice");
+  const advancedFields = filtered.filter((f) => f.category === "advanced");
 
   const noResults = filtered.length === 0;
 
@@ -89,28 +147,52 @@ const Sidebar: React.FC = () => {
         {noResults ? (
           <div className="no-results">
             <span>🔍</span>
-            <p>No fields match "<strong>{query}</strong>"</p>
+            <p>
+              No fields match "<strong>{query}</strong>"
+            </p>
           </div>
         ) : (
-          <Collapse defaultActiveKey={['basic', 'choice', 'advanced']} ghost className="field-categories">
+          <Collapse
+            defaultActiveKey={["basic", "choice", "advanced"]}
+            ghost
+            className="field-categories"
+          >
             {basicFields.length > 0 && (
-              <Panel header={`Basic Fields (${basicFields.length})`} key="basic" className="field-panel">
+              <Panel
+                header={`Basic Fields (${basicFields.length})`}
+                key="basic"
+                className="field-panel"
+              >
                 <div className="fields-grid">
-                  {basicFields.map((field) => <DraggableField key={field.type} field={field} />)}
+                  {basicFields.map((field) => (
+                    <DraggableField key={field.type} field={field} />
+                  ))}
                 </div>
               </Panel>
             )}
             {choiceFields.length > 0 && (
-              <Panel header={`Choice Fields (${choiceFields.length})`} key="choice" className="field-panel">
+              <Panel
+                header={`Choice Fields (${choiceFields.length})`}
+                key="choice"
+                className="field-panel"
+              >
                 <div className="fields-grid">
-                  {choiceFields.map((field) => <DraggableField key={field.type} field={field} />)}
+                  {choiceFields.map((field) => (
+                    <DraggableField key={field.type} field={field} />
+                  ))}
                 </div>
               </Panel>
             )}
             {advancedFields.length > 0 && (
-              <Panel header={`Advanced Fields (${advancedFields.length})`} key="advanced" className="field-panel">
+              <Panel
+                header={`Advanced Fields (${advancedFields.length})`}
+                key="advanced"
+                className="field-panel"
+              >
                 <div className="fields-grid">
-                  {advancedFields.map((field) => <DraggableField key={field.type} field={field} />)}
+                  {advancedFields.map((field) => (
+                    <DraggableField key={field.type} field={field} />
+                  ))}
                 </div>
               </Panel>
             )}
@@ -119,7 +201,9 @@ const Sidebar: React.FC = () => {
       </div>
 
       <div className="sidebar-footer">
-        <span className="field-count">{fieldTypes.length} field types available</span>
+        <span className="field-count">
+          {fieldTypes.length} field types available
+        </span>
       </div>
     </Sider>
   );
