@@ -1,0 +1,74 @@
+.clear-form-modal {
+    .ant-modal-content {
+      border-radius: 16px;
+      padding: 0;
+      overflow: hidden;
+    }
+  
+    .clear-modal-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 36px 32px 28px;
+  
+      .clear-modal-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: #fef2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        color: #ef4444;
+      }
+  
+      .clear-modal-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 10px;
+      }
+  
+      .clear-modal-description {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.6;
+        margin: 0 0 28px;
+  
+        strong {
+          color: #374151;
+        }
+      }
+  
+      .clear-modal-actions {
+        display: flex;
+        gap: 12px;
+        width: 100%;
+  
+        .cancel-btn {
+          flex: 1;
+          border-radius: 8px;
+          border-color: #e5e7eb;
+          color: #374151;
+          font-weight: 500;
+  
+          &:hover {
+            border-color: #9ca3af;
+            color: #111827;
+          }
+        }
+  
+        .confirm-btn {
+          flex: 1;
+          border-radius: 8px;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+        }
+      }
+    }
+  }

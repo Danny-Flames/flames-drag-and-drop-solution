@@ -33,6 +33,7 @@ import "./DashboardLayout.scss";
 import { PiPencilSimpleThin } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineSave } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import ClearFormModal from "./ClearFormModal";
 
 const { Header, Content } = Layout;
 
@@ -54,7 +55,6 @@ const DashboardLayout: React.FC = () => {
     (state: RootState) => state.formBuilder
   );
   const { sections, formTitle } = present;
-
   const [activeId, setActiveId] = useState<string | null>(null);
   const [activeDragData, setActiveDragData] = useState<{
     label: string;
@@ -63,6 +63,7 @@ const DashboardLayout: React.FC = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [tempTitle, setTempTitle] = useState(formTitle);
+  const [clearModalOpen, setClearModalOpen] = useState(false);
 
   const canUndo = past.length > 0;
   const canRedo = future.length > 0;
@@ -258,7 +259,10 @@ const DashboardLayout: React.FC = () => {
                     setTempTitle(formTitle);
                   }}
                 >
-                  {formTitle} <span><PiPencilSimpleThin size={18} /></span>
+                  {formTitle}{" "}
+                  <span>
+                    <PiPencilSimpleThin size={18} />
+                  </span>
                 </div>
               )}
             </div>
@@ -289,7 +293,10 @@ const DashboardLayout: React.FC = () => {
               className="action-btn preview-btn"
               onClick={() => setPreviewOpen(true)}
             >
-              <span><AiOutlineEye size={16} /></span> Preview
+              <span>
+                <AiOutlineEye size={16} />
+              </span>{" "}
+              Preview
             </button>
             <button
               className="action-btn save-btn"
@@ -303,18 +310,14 @@ const DashboardLayout: React.FC = () => {
                 }, 1500);
               }}
             >
-              <span><AiOutlineSave size={18} /></span> Save
+              <span>
+                <AiOutlineSave size={18} />
+              </span>{" "}
+              Save
             </button>
             <button
               className="action-btn clear-btn"
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Clear the entire form? This cannot be undone after refresh."
-                  )
-                )
-                  dispatch(clearForm());
-              }}
+              onClick={() => setClearModalOpen(true)}
             >
               <RiDeleteBin6Line size={18} /> Clear
             </button>
@@ -348,6 +351,14 @@ const DashboardLayout: React.FC = () => {
       </Layout>
 
       <PreviewModal open={previewOpen} onClose={() => setPreviewOpen(false)} />
+      <ClearFormModal
+        open={clearModalOpen}
+        onConfirm={() => {
+          dispatch(clearForm());
+          setClearModalOpen(false);
+        }}
+        onCancel={() => setClearModalOpen(false)}
+      />
     </Layout>
   );
 };
