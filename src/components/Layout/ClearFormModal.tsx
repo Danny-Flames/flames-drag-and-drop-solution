@@ -54,6 +54,7 @@ const ClearFormModal: React.FC<ClearFormModalProps> = ({
             icon={<RiDeleteBin6Line size={16} />}
             onClick={onConfirm}
             className="confirm-btn"
+            style={{ marginLeft: '15px', border: 'none', outline: 'none'}}
           >
             {confirmText}
           </Button>
