@@ -12,7 +12,6 @@ import {
   useSensors,
   closestCorners,
 } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 import {
   addField,
   reorderFields,
@@ -29,15 +28,17 @@ import Sidebar from "../Sidebar/Sidebar";
 import FormBuilder from "../FormBuilder/FormBuilder";
 import PropertiesPanel from "../PropertiesPanel/PropertiesPanel";
 import PreviewModal from "../Preview/PreviewModal";
+import ClearFormModal from "./ClearFormModal";
+import SavedFormsList from "../SavedForms/SavedFormsList";
+import { saveFormToList } from "../../utils/formStorage";
 import "./DashboardLayout.scss";
 import { PiPencilSimpleThin } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineSave } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import ClearFormModal from "./ClearFormModal";
+import { MdOutlineArticle } from "react-icons/md";
 
 const { Header, Content } = Layout;
 
-// A lightweight overlay card shown while dragging
 const DragOverlayCard: React.FC<{ label: string; type: string }> = ({
   label,
   type,
@@ -55,6 +56,7 @@ const DashboardLayout: React.FC = () => {
     (state: RootState) => state.formBuilder
   );
   const { sections, formTitle } = present;
+
   const [activeId, setActiveId] = useState<string | null>(null);
   const [activeDragData, setActiveDragData] = useState<{
     label: string;
@@ -64,11 +66,11 @@ const DashboardLayout: React.FC = () => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [tempTitle, setTempTitle] = useState(formTitle);
   const [clearModalOpen, setClearModalOpen] = useState(false);
+  const [showSavedForms, setShowSavedForms] = useState(false);
 
   const canUndo = past.length > 0;
   const canRedo = future.length > 0;
 
-  // Keyboard shortcuts: Ctrl+Z undo, Ctrl+Y / Ctrl+Shift+Z redo
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const isMac = navigator.platform.toUpperCase().includes("MAC");
@@ -91,14 +93,12 @@ const DashboardLayout: React.FC = () => {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  // Helper: find which section a field belongs to
   const findSectionOfField = useCallback(
     (fieldId: string) =>
       sections.find((s) => s.fields.some((f) => f.id === fieldId)),
     [sections]
   );
 
-  // Helper: is this ID a section ID?
   const isSectionId = useCallback(
     (id: string) => sections.some((s) => s.id === id),
     [sections]
@@ -116,9 +116,7 @@ const DashboardLayout: React.FC = () => {
     dispatch(setDraggedFieldType(active.data.current?.type || null));
   };
 
-  const handleDragOver = (event: DragOverEvent) => {
-    // Used for cross-section visual feedback if needed
-  };
+  const handleDragOver = (event: DragOverEvent) => {};
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -131,7 +129,6 @@ const DashboardLayout: React.FC = () => {
     const activeIdStr = active.id as string;
     const overIdStr = over.id as string;
 
-    // ── Case 1: Dropping a NEW field from sidebar ────────────────────────────
     if (active.data.current?.isNewField) {
       const fieldType = active.data.current.type as string;
       let targetSectionId: string | null = null;
@@ -139,7 +136,6 @@ const DashboardLayout: React.FC = () => {
       if (isSectionId(overIdStr)) {
         targetSectionId = overIdStr;
       } else {
-        // Over a field — find its section
         const section = findSectionOfField(overIdStr);
         if (section) targetSectionId = section.id;
       }
@@ -166,7 +162,6 @@ const DashboardLayout: React.FC = () => {
       return;
     }
 
-    // ── Case 2: Reordering SECTIONS ──────────────────────────────────────────
     if (
       isSectionId(activeIdStr) &&
       isSectionId(overIdStr) &&
@@ -180,7 +175,6 @@ const DashboardLayout: React.FC = () => {
       return;
     }
 
-    // ── Case 3: Reordering FIELDS ────────────────────────────────────────────
     const activeSection = findSectionOfField(activeIdStr);
     if (!activeSection) return;
 
@@ -191,7 +185,6 @@ const DashboardLayout: React.FC = () => {
     if (!overSection) return;
 
     if (activeSection.id === overSection.id) {
-      // Same section reorder
       const oldIndex = activeSection.fields.findIndex(
         (f) => f.id === activeIdStr
       );
@@ -204,7 +197,6 @@ const DashboardLayout: React.FC = () => {
         );
       }
     } else {
-      // Cross-section move
       const toIndex = isSectionId(overIdStr)
         ? overSection.fields.length
         : overSection.fields.findIndex((f) => f.id === overIdStr);
@@ -225,6 +217,26 @@ const DashboardLayout: React.FC = () => {
     else setTempTitle(formTitle);
     setIsEditingTitle(false);
   };
+
+  const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    saveFormToList(present);
+    const btn = e.currentTarget;
+    const original = btn.textContent;
+    btn.textContent = "Saved!";
+    setTimeout(() => {
+      btn.textContent = original;
+    }, 1500);
+  };
+
+  // ── Show SavedFormsList page ──────────────────────────────────────────────
+  if (showSavedForms) {
+    return (
+      <SavedFormsList
+        onBack={() => setShowSavedForms(false)}
+        onEdit={() => setShowSavedForms(false)}
+      />
+    );
+  }
 
   return (
     <Layout className="dashboard-layout">
@@ -269,7 +281,6 @@ const DashboardLayout: React.FC = () => {
           </div>
 
           <div className="header-actions">
-            {/* Undo / Redo */}
             <button
               className={`action-btn undo-btn ${!canUndo ? "disabled" : ""}`}
               onClick={() => dispatch(undo())}
@@ -290,36 +301,43 @@ const DashboardLayout: React.FC = () => {
             <div className="header-divider" />
 
             <button
+              className="action-btn my-forms-btn flex-item"
+              onClick={() => setShowSavedForms(true)}
+            >
+              <span className="flex-item">
+                <MdOutlineArticle size={16} />
+              </span>
+              <span>My Forms</span>
+            </button>
+
+            <button
               className="action-btn preview-btn flex-item"
               onClick={() => setPreviewOpen(true)}
             >
               <span className="flex-item">
                 <AiOutlineEye size={16} />
-              </span>{" "}
+              </span>
               <span>Preview</span>
             </button>
+
             <button
-              className="action-btn save-btn"
-              onClick={() => {
-                // localStorage already auto-saves; just give feedback
-                const btn = document.activeElement as HTMLButtonElement;
-                const original = btn.textContent;
-                btn.textContent = "Saved!";
-                setTimeout(() => {
-                  btn.textContent = original;
-                }, 1500);
-              }}
+              className="action-btn save-btn flex-item"
+              onClick={handleSave}
             >
               <span className="flex-item">
                 <AiOutlineSave size={16} />
-              </span>{" "}
+              </span>
               <span>Save</span>
             </button>
+
             <button
-              className="action-btn clear-btn"
+              className="action-btn clear-btn flex-item"
               onClick={() => setClearModalOpen(true)}
             >
-              <RiDeleteBin6Line size={16} /> Clear
+              <span className="flex-item">
+                <RiDeleteBin6Line size={16} />
+              </span>
+              <span>Clear</span>
             </button>
           </div>
         </div>

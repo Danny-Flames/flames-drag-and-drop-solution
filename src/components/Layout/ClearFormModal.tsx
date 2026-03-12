@@ -2,15 +2,29 @@ import React from "react";
 import { Modal, Button } from "antd";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoWarningOutline } from "react-icons/io5";
-import "./ClearFormModal.scss";
 
 interface ClearFormModalProps {
   open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  title?: string;
+  description?: React.ReactNode;
+  confirmText?: string;
 }
 
-const ClearFormModal: React.FC<ClearFormModalProps> = ({ open, onConfirm, onCancel }) => {
+const ClearFormModal: React.FC<ClearFormModalProps> = ({
+  open,
+  onConfirm,
+  onCancel,
+  title = "Clear Entire Form?",
+  description = (
+    <>
+      This will permanently remove all sections and fields you've built. This
+      action <strong>cannot be undone</strong> after the page is refreshed.
+    </>
+  ),
+  confirmText = "Yes, Clear Form",
+}) => {
   return (
     <Modal
       open={open}
@@ -26,11 +40,8 @@ const ClearFormModal: React.FC<ClearFormModalProps> = ({ open, onConfirm, onCanc
           <IoWarningOutline size={36} />
         </div>
 
-        <h3 className="clear-modal-title">Clear Entire Form?</h3>
-        <p className="clear-modal-description">
-          This will permanently remove all sections and fields you've built.
-          This action <strong>cannot be undone</strong> after the page is refreshed.
-        </p>
+        <h3 className="clear-modal-title">{title}</h3>
+        <p className="clear-modal-description">{description}</p>
 
         <div className="clear-modal-actions">
           <Button className="cancel-btn" onClick={onCancel} size="large">
@@ -44,7 +55,7 @@ const ClearFormModal: React.FC<ClearFormModalProps> = ({ open, onConfirm, onCanc
             onClick={onConfirm}
             className="confirm-btn"
           >
-            Yes, Clear Form
+            {confirmText}
           </Button>
         </div>
       </div>

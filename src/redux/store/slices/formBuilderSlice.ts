@@ -269,6 +269,12 @@ export const formBuilderSlice = createSlice({
         localStorage.removeItem(STORAGE_KEY);
       } catch {}
     },
+    loadSnapshot: (state, action: PayloadAction<FormBuilderSnapshot>) => {
+      state.present = action.payload;
+      state.past = [];
+      state.future = [];
+      saveToStorage(action.payload);
+    },
     setSelectedField: (state, action: PayloadAction<string | null>) => {
       state.selectedField = action.payload;
     },
@@ -293,6 +299,7 @@ export const {
   moveFieldToSection,
   updateFormSettings,
   clearForm,
+  loadSnapshot,
   setSelectedField,
   setDraggedFieldType,
 } = formBuilderSlice.actions;

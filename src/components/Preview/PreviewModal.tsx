@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, Input, Select, Checkbox, Radio, Rate, Button, Divider, Tag } from 'antd';
 import { RootState } from '../../redux/store/store';
-import { FormField, FormSection } from '../../redux/store/slices/formBuilderSlice';
+import { FormField, FormSection, FormBuilderSnapshot } from '../../redux/store/slices/formBuilderSlice';
 import './PreviewModal.scss';
 import { AiOutlineEye } from 'react-icons/ai';
 
@@ -50,15 +50,24 @@ const PreviewField: React.FC<PreviewFieldProps> = ({ field }) => {
         return <Input type="date" value={value} onChange={(e) => setValue(e.target.value)} />;
       case 'select':
         return (
-          <Select placeholder="Select an option" style={{ width: '100%' }} value={value || undefined} onChange={setValue}>
-            {field.options?.map((opt, i) => <Option key={i} value={opt}>{opt}</Option>)}
+          <Select
+            placeholder="Select an option"
+            style={{ width: '100%' }}
+            value={value || undefined}
+            onChange={setValue}
+          >
+            {field.options?.map((opt, i) => (
+              <Option key={i} value={opt}>{opt}</Option>
+            ))}
           </Select>
         );
       case 'radio':
         return (
           <Radio.Group value={value} onChange={(e) => setValue(e.target.value)}>
             {field.options?.map((opt, i) => (
-              <Radio key={i} value={opt} style={{ display: 'block', marginBottom: 4 }}>{opt}</Radio>
+              <Radio key={i} value={opt} style={{ display: 'block', marginBottom: 4 }}>
+                {opt}
+              </Radio>
             ))}
           </Radio.Group>
         );
@@ -78,7 +87,11 @@ const PreviewField: React.FC<PreviewFieldProps> = ({ field }) => {
         return (
           <div className="preview-file-upload">
             <label className="file-upload-label">
-              <input type="file" accept={field.type === 'image' ? 'image/*' : '*'} style={{ display: 'none' }} />
+              <input
+                type="file"
+                accept={field.type === 'image' ? 'image/*' : '*'}
+                style={{ display: 'none' }}
+              />
               <Button>{field.type === 'image' ? '🖼 Choose Image' : '📎 Choose File'}</Button>
             </label>
             <span className="file-hint">or drag and drop here</span>
@@ -102,7 +115,13 @@ const PreviewField: React.FC<PreviewFieldProps> = ({ field }) => {
           </div>
         );
       default:
-        return <Input placeholder={field.placeholder} value={value} onChange={(e) => setValue(e.target.value)} />;
+        return (
+          <Input
+            placeholder={field.placeholder}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+        );
     }
   };
 
@@ -133,11 +152,12 @@ const PreviewSection: React.FC<{ section: FormSection }> = ({ section }) => (
 interface PreviewModalProps {
   open: boolean;
   onClose: () => void;
+  snapshotOverride?: FormBuilderSnapshot;
 }
 
-const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose }) => {
+const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose, snapshotOverride }) => {
   const { present } = useSelector((state: RootState) => state.formBuilder);
-  const { formTitle, sections, formSettings } = present;
+  const { formTitle, sections, formSettings } = snapshotOverride ?? present;
 
   const totalFields = sections.reduce((acc, s) => acc + s.fields.length, 0);
   const requiredFields = sections.reduce(
