@@ -113,10 +113,21 @@
     padding: 4px 8px;
     border-radius: 6px;
     transition: background 0.15s;
+    display: flex;
+    align-items: center;
 
     &:hover {
       background: rgba(59, 130, 246, 0.08);
       color: var(--primary-color);
+    }
+
+    .flex-button {
+      display: flex;
+      align-items: center;
+
+      &.left-10 {
+        margin-left: 10px;
+      }
     }
   }
 
@@ -137,6 +148,11 @@
   height: 24px;
   background: var(--border-color);
   margin: 0 4px;
+}
+
+.flex-item {
+  display: flex;
+  align-items: center;
 }
 
 .action-btn {

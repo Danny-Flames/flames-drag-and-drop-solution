@@ -259,8 +259,8 @@ const DashboardLayout: React.FC = () => {
                     setTempTitle(formTitle);
                   }}
                 >
-                  {formTitle}{" "}
-                  <span>
+                  <span>{formTitle} </span>
+                  <span className="flex-button left-10">
                     <PiPencilSimpleThin size={18} />
                   </span>
                 </div>
@@ -290,13 +290,13 @@ const DashboardLayout: React.FC = () => {
             <div className="header-divider" />
 
             <button
-              className="action-btn preview-btn"
+              className="action-btn preview-btn flex-item"
               onClick={() => setPreviewOpen(true)}
             >
-              <span>
+              <span className="flex-item">
                 <AiOutlineEye size={16} />
               </span>{" "}
-              Preview
+              <span>Preview</span>
             </button>
             <button
               className="action-btn save-btn"
@@ -310,16 +310,16 @@ const DashboardLayout: React.FC = () => {
                 }, 1500);
               }}
             >
-              <span>
-                <AiOutlineSave size={18} />
+              <span className="flex-item">
+                <AiOutlineSave size={16} />
               </span>{" "}
-              Save
+              <span>Save</span>
             </button>
             <button
               className="action-btn clear-btn"
               onClick={() => setClearModalOpen(true)}
             >
-              <RiDeleteBin6Line size={18} /> Clear
+              <RiDeleteBin6Line size={16} /> Clear
             </button>
           </div>
         </div>
